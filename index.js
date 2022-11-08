@@ -29,7 +29,7 @@ async function run() {
         const serviceCollection = client.db('cateringServices').collection('services');
         const purchaseCollection = client.db('cateringServices').collection('purchase');
 
-        app.get('/servicess', async (req, res) => {
+        app.get('/serviceshome', async (req, res) => {
             const query = {};
             const cursor = serviceCollection.find(query);
             const services = await cursor.limit(3).toArray();
