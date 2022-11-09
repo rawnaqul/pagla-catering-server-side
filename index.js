@@ -28,6 +28,7 @@ async function run() {
     try {
         const serviceCollection = client.db('cateringServices').collection('services');
         const purchaseCollection = client.db('cateringServices').collection('purchase');
+        const reviewCollection = client.db('cateringServices').collection('reviews');
 
         app.get('/serviceshome', async (req, res) => {
             const query = {};
@@ -70,6 +71,55 @@ async function run() {
             const result = await purchaseCollection.insertOne(purchase);
             res.send(result);
         });
+
+
+        // Review Post
+        app.post('/reviews', async (req, res) => {
+            const review = req.body;
+            console.log(review);
+            const result = await reviewCollection.insertOne(review);
+            res.send(result);
+        });
+
+        // Review get in product page
+        app.get('/reviews', async (req, res) => {
+            let query = {};
+
+            if (req.query.service) {
+                query = {
+                    service: req.query.service
+                }
+            }
+
+            const cursor = reviewCollection.find(query);
+            const purchase = await cursor.toArray();
+            res.send(purchase);
+        });
+
+        // Dashboard
+        app.patch('/purchase/:id', async (req, res) => {
+            const id = req.params.id;
+            const status = req.body.status
+            const query = { _id: ObjectId(id) }
+            const updatedDoc = {
+                $set: {
+                    status: status
+                }
+            }
+            const result = await purchaseCollection.updateOne(query, updatedDoc);
+            res.send(result);
+        })
+
+        app.delete('/purchase/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await purchaseCollection.deleteOne(query);
+            res.send(result);
+        })
+
+
+
+
 
 
     }
