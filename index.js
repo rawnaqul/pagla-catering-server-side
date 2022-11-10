@@ -36,10 +36,13 @@ async function run() {
             const services = await cursor.limit(3).toArray();
             res.send(services);
         });
+
+
+        // custom services display
         app.get('/servicesadd', async (req, res) => {
             const query = {};
             const cursor = serviceCollection.find(query);
-            const services = await cursor.limit(3).toArray();
+            const services = await cursor.toArray();
             res.send(services);
         });
         app.get('/services', async (req, res) => {
@@ -114,14 +117,14 @@ async function run() {
             }
             const result = await purchaseCollection.updateOne(query, updatedDoc);
             res.send(result);
-        })
+        });
 
         app.delete('/purchase/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await purchaseCollection.deleteOne(query);
             res.send(result);
-        })
+        });
 
         //Add Service=============================
         app.post('/services', async (req, res) => {
