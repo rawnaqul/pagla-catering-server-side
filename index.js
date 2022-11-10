@@ -36,6 +36,12 @@ async function run() {
             const services = await cursor.limit(3).toArray();
             res.send(services);
         });
+        app.get('/servicesadd', async (req, res) => {
+            const query = {};
+            const cursor = serviceCollection.find(query);
+            const services = await cursor.limit(3).toArray();
+            res.send(services);
+        });
         app.get('/services', async (req, res) => {
             const query = {};
             const cursor = serviceCollection.find(query);
@@ -116,6 +122,14 @@ async function run() {
             const result = await purchaseCollection.deleteOne(query);
             res.send(result);
         })
+
+        //Add Service=============================
+        app.post('/services', async (req, res) => {
+            const user = req.body;
+            const result = await serviceCollection.insertOne(user);
+            res.send(result)
+        });
+
 
 
 
